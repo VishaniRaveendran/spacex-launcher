@@ -102,7 +102,7 @@ describe("LaunchListView", () => {
   });
 
   it("renders a list of launches", async () => {
-    const { LaunchListView } = await import("../LaunchListView");
+    const { LaunchListView } = await import("./LaunchListView");
     render(<LaunchListView />);
     const cards = screen.getAllByTestId("launch-card");
     expect(cards.length).toBeGreaterThanOrEqual(2);
@@ -111,13 +111,13 @@ describe("LaunchListView", () => {
   });
 
   it("renders filters", async () => {
-    const { LaunchListView } = await import("../LaunchListView");
+    const { LaunchListView } = await import("./LaunchListView");
     render(<LaunchListView />);
     expect(screen.getAllByTestId("filters")[0]).toBeTruthy();
   });
 
   it("shows count message", async () => {
-    const { LaunchListView } = await import("../LaunchListView");
+    const { LaunchListView } = await import("./LaunchListView");
     render(<LaunchListView />);
     expect(screen.getAllByTestId("count-message")[0]).toBeTruthy();
   });
@@ -131,13 +131,13 @@ describe("LaunchListView", () => {
         hasMore: false,
       }),
     }));
-    const { LaunchListView } = await import("../LaunchListView");
+    const { LaunchListView } = await import("./LaunchListView");
     render(<LaunchListView />);
     expect(screen.getAllByTestId("loading-skeleton")[0]).toBeTruthy();
   });
 
   it("shows no more launches message if hasMore is false", async () => {
-    const { LaunchListView } = await import("../LaunchListView");
+    const { LaunchListView } = await import("./LaunchListView");
     render(<LaunchListView />);
     const msgs = screen.getAllByText(/no more launches to load/i);
     expect(msgs.length).toBeGreaterThanOrEqual(1);
