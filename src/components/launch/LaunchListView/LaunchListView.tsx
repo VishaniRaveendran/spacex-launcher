@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Header from "@/components/common/Header/Header";
 import { useState, useEffect } from "react";
@@ -37,9 +38,6 @@ export function LaunchListView() {
   const [sortOption, setSortOption] = useState<string>(
     searchParams.get("sort") || "Newest → Oldest"
   );
-  useEffect(() => {
-    console.log("[DEBUG] sortOption changed:", sortOption);
-  }, [sortOption]);
   const [page, setPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
   const [yearOptions, setYearOptions] = useState<string[]>(["All Years"]);
