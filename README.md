@@ -1,6 +1,10 @@
 # SpaceX Launcher
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It displays SpaceX launches with filtering, search, and details, using the public SpaceX API.
+This is a [Next.js](https://nextjs.org) app (using React 19) that displays SpaceX launches with filtering, search, and details, using the public SpaceX API.
+
+Development tooling and testing use [Vite](https://vitejs.dev/) for a fast and modern workflow.
+
+Custom styling is implemented with [Tailwind CSS](https://tailwindcss.com/).
 
 ## Getting Started
 
