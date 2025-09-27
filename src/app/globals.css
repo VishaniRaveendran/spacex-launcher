@@ -1,22 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  /* SpaceX-inspired background gradient */
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.954) 41.83%,
+    rgba(6, 40, 97, 0.916) 100%
+  );
+
   --foreground: #171717;
 }
 
 @theme inline {
+  --color-primary: var(--color-spacex-blue);
+  --color-secondary: var(--color-light-gray);
+  --color-accent: var(--color-cyan);
+  --color-error: var(--color-falcon-red);
+  --color-success: var(--color-green);
+  --color-warning: var(--color-orange);
+  --color-highlight: var(--color-gold);
+  --color-card-bg: var(--color-silver);
+  --font-orbitron: var(--font-orbitron);
+  --font-space-grotesk: var(--font-space-grotesk);
+  --font-exo2: var(--font-exo2);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
