@@ -97,7 +97,6 @@ export function LaunchListView() {
   }, [selectedYear, selectedLaunch]);
 
   const pageSize = 15;
-  // Robust sort direction detection
   const normalizedSort = sortOption.toLowerCase();
   const sortBy =
     normalizedSort.includes("oldest") && !normalizedSort.startsWith("newest")

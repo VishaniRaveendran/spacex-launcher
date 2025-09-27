@@ -42,7 +42,6 @@ export const Filters: React.FC<FiltersProps> = ({
     setSortOption("Newest → Oldest");
   };
 
-  // Only show clear button if any filter is not at its default value
   const isFiltered =
     selectedYear !== "All Years" ||
     selectedLaunch !== "All Launches" ||

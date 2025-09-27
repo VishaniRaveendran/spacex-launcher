@@ -43,7 +43,6 @@ export function CountMessage({
     );
   }
 
-  // Helper for standard count text
   const CountText = ({
     current,
     total,
