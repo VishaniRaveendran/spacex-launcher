@@ -11,7 +11,6 @@ interface RocketSectionProps {
   };
 }
 
-// ...existing code...
 export const RocketSection: React.FC<RocketSectionProps> = ({ rocket }) => {
   return (
     <div className="bg-gradient-to-br from-[#0B0D17] via-[#1B2A41] to-[#005288] rounded-2xl shadow-2xl p-8 border border-[#1B2A41] backdrop-blur-md transition-shadow duration-300">

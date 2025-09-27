@@ -70,16 +70,12 @@ export const FilterButton: React.FC<FilterButtonProps> = ({
     setIsOpen(false);
   };
 
-  // Blue-based space theme: deep blue, sky blue, and accent blue
-  // SpaceX-inspired palette
-  // Deep Space Blue: #0B0D17, SpaceX Blue: #005288, White: #FFFFFF, Light Gray: #D0D6F9
   const baseButtonClasses =
     "flex items-center gap-2 rounded-xl px-5 py-2.5 font-semibold text-white " +
     "bg-gradient-to-r from-[#0B0D17] via-[#005288] to-[#21C1D6] " +
     "shadow-lg border border-[#005288]/60 transition-all duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#21C1D6]/60 " +
     "hover:from-[#005288] hover:to-[#D0D6F9] hover:text-[#0B0D17] hover:scale-[1.04] active:scale-95 active:shadow-md";
 
-  // Favourite Active State: Gold/yellow gradient background, gold ring, gold text
   const activeToggleClasses =
     "ring-2 ring-yellow-400 border border-yellow-300 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900 shadow-lg " +
     "hover:from-yellow-400 hover:to-yellow-300 focus-visible:ring-4 focus-visible:ring-yellow-300 transition-all duration-150";
