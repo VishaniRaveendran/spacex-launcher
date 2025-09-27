@@ -1,10 +1,13 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SpaceX Launcher
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It displays SpaceX launches with filtering, search, and details, using the public SpaceX API.
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
+# Development
 npm run dev
 # or
 yarn dev
@@ -14,23 +17,61 @@ pnpm dev
 bun dev
 ```
 
+```bash
+# Production build
+npm run build
+npm start
+```
+
+## Testing
+
+```bash
+npm run test
+# or
+yarn test
+```
+
+## Linting
+
+```bash
+npm run lint
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
+
+## Architecture & Decisions
+
+### State Management
+
+- **React useState/useEffect/useMemo**: All state is managed locally in React components and custom hooks. No external state management library is used, as the app's state is simple and mostly local (filters, search, pagination, favorites).
+- **Favorites**: Managed with a custom hook (`useFavorites`) and persisted in `localStorage`.
+
+### Data Fetching
+
+- **REST API**: Data is fetched from the public SpaceX API (v4) using [axios](https://axios-http.com/).
+- **Custom Hooks**: Hooks like `useLaunches` and `useLaunchDetails` encapsulate fetching, filtering, sorting, and error/loading state.
+- **Client-side Filtering**: All launches are fetched once, then filtered/sorted/paginated on the client for responsiveness. This is a trade-off for simplicity and speed, but may not scale for very large datasets.
+
+### Trade-offs
+
+- **No Global State Library**: Chose not to use Redux, Zustand, or Context API to keep things simple and avoid unnecessary boilerplate.
+- **Client-side Filtering**: Fast for small/medium datasets, but not ideal for very large data. For production-scale, server-side filtering or pagination would be preferable.
+- **No SSR/ISR**: All data fetching is client-side for simplicity. Could be improved with Next.js server components or API routes for SEO and performance.
+
+---
+
+## Next Steps (with more time)
+
+- Add server-side data fetching (SSR/ISR) for SEO and initial load performance.
+- Implement server-side filtering/pagination for scalability.
+- Add more robust error handling and loading skeletons.
+- Add user authentication for personalized features (e.g., saving favorites to a user account).
+- Improve test coverage (unit, integration, e2e).
+- Add accessibility and performance optimizations.
+- Polish UI/UX and add animations.
+
+---
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

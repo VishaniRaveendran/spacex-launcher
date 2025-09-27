@@ -14,7 +14,7 @@ vi.mock("@/lib/utils/font", () => ({
 }));
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { LaunchCard } from "../LaunchCard";
+import { LaunchCard } from "./LaunchCard";
 
 const mockLaunch = {
   id: "1",
