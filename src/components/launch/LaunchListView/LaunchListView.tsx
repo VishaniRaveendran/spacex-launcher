@@ -53,7 +53,8 @@ export function LaunchListView() {
     if (selectedLaunch && selectedLaunch !== "All Launches")
       params.set("launch", selectedLaunch);
     if (favouritesActive) params.set("favourites", "true");
-    if (sortOption) params.set("sort", sortOption);
+    if (sortOption && sortOption !== "Newest → Oldest")
+      params.set("sort", sortOption);
     router.replace("?" + params.toString(), { scroll: false });
   }, [
     search,
