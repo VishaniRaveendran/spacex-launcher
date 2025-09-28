@@ -19,8 +19,9 @@ export function useLaunches(options: UseLaunchesOptions) {
   const [hasMore, setHasMore] = useState(true);
 
   const fetchLaunches = useCallback(async (abortSignal?: AbortSignal) => {
+    setLoading(true);
+    setError(null);
     try {
-      setError(null);
       const response = await apiClient.get<Launch[]>("/launches", {
         signal: abortSignal,
       });
@@ -28,80 +29,88 @@ export function useLaunches(options: UseLaunchesOptions) {
     } catch (err) {
       const axiosError = err as AxiosError;
       if (
-        axiosError.name !== "CanceledError" &&
-        axiosError.name !== "AbortError"
+        axiosError.name === "CanceledError" ||
+        axiosError.name === "AbortError"
       ) {
-        setError(axiosError.message);
+        return;
       }
+      setError(axiosError.message);
     } finally {
       setLoading(false);
     }
   }, []);
 
   const filteredAndSortedLaunches = useMemo(() => {
-    let filtered = [...launches];
-
-    // Search filter
+    let filtered = launches;
     if (options.searchTerm) {
+      const search = options.searchTerm.toLowerCase();
       filtered = filtered.filter((launch) =>
-        launch.name.toLowerCase().includes(options.searchTerm.toLowerCase())
+        launch.name.toLowerCase().includes(search)
       );
     }
-
-    // Year filter
     if (options.yearFilter && options.yearFilter !== "all") {
       filtered = filtered.filter((launch) => {
         const year = new Date(launch.date_utc).getFullYear().toString();
         return year === options.yearFilter;
       });
     }
-
-    // Success filter
     if (options.successFilter !== "all") {
-      filtered = filtered.filter((launch) => {
-        if (options.successFilter === "success") return launch.success === true;
-        if (options.successFilter === "failed") return launch.success === false;
-        return true;
-      });
+      filtered = filtered.filter((launch) =>
+        options.successFilter === "success"
+          ? launch.success === true
+          : options.successFilter === "failed"
+          ? launch.success === false
+          : true
+      );
     }
-
-    // Sort
-    filtered.sort((a, b) => {
+    return filtered.slice().sort((a, b) => {
       const dateA = new Date(a.date_utc).getTime();
       const dateB = new Date(b.date_utc).getTime();
       return options.sortBy === "newest" ? dateB - dateA : dateA - dateB;
     });
-
-    return filtered;
   }, [launches, options]);
 
   const paginatedLaunches = useMemo(() => {
-    const startIndex = (options.page - 1) * options.limit;
-    const endIndex = startIndex + options.limit;
+    const endIndex = options.page * options.limit;
     return filteredAndSortedLaunches.slice(0, endIndex);
   }, [filteredAndSortedLaunches, options.page, options.limit]);
 
   // Update hasMore separately using useEffect
   useEffect(() => {
-    const startIndex = (options.page - 1) * options.limit;
-    const endIndex = startIndex + options.limit;
-    setHasMore(endIndex < filteredAndSortedLaunches.length);
+    setHasMore(options.page * options.limit < filteredAndSortedLaunches.length);
   }, [filteredAndSortedLaunches.length, options.page, options.limit]);
 
   const retry = useCallback(() => {
-    setLoading(true);
-    setError(null);
     fetchLaunches();
   }, [fetchLaunches]);
 
   useEffect(() => {
+    setLoading(true);
     const abortController = new AbortController();
     fetchLaunches(abortController.signal);
-
     return () => {
       abortController.abort();
     };
-  }, [fetchLaunches]);
+  }, [
+    fetchLaunches,
+    options.searchTerm,
+    options.yearFilter,
+    options.successFilter,
+    options.sortBy,
+    options.page,
+    options.limit,
+  ]);
+
+  const allYears = useMemo(() => {
+    const years = Array.from(
+      new Set(
+        launches
+          .map((l) => l.date_utc?.slice(0, 4))
+          .filter((y): y is string => !!y && !isNaN(Number(y)))
+      )
+    ).sort((a, b) => Number(b) - Number(a));
+    return ["All years", ...years];
+  }, [launches]);
 
   return {
     launches: paginatedLaunches,
@@ -109,6 +118,8 @@ export function useLaunches(options: UseLaunchesOptions) {
     error,
     hasMore,
     retry,
-    totalCount: filteredAndSortedLaunches.length,
+    totalCount: launches.length,
+    filteredCount: filteredAndSortedLaunches.length,
+    allYears,
   };
 }

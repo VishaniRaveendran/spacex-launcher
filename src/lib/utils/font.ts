@@ -1,7 +1,6 @@
 import { Exo_2, Orbitron, Space_Grotesk } from "next/font/google";
 
-
-export const obitron = Orbitron({
+export const orbitron = Orbitron({
   variable: "--font-orbitron",
   subsets: ["latin"],
 });

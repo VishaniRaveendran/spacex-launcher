@@ -10,7 +10,7 @@ import { vi } from "vitest";
 
 // Mock Next.js font import (Orbitron)
 vi.mock("@/lib/utils/font", () => ({
-  obitron: { variable: "--font-orbitron" },
+  orbitron: { variable: "--font-orbitron" },
 }));
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";

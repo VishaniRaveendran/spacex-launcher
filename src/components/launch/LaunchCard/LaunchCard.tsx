@@ -37,13 +37,20 @@ export const LaunchCard: React.FC<LaunchCardProps> = ({
     onFavouriteToggle?.();
   };
   const handleCardClick = () => {
-    router.push(`/launch/${id}`);
+    router.push(`/launch/${id}`, { scroll: false });
+  };
+
+  // Prefetch detail page for smoother navigation
+  const handleMouseEnter = () => {
+    router.prefetch(`/launch/${id}`);
   };
   return (
     <div
       data-testid="launch-card"
-      className="max-w-sm bg-gradient-to-br from-[#0B0D17] via-[#1B2A41] to-[#005288] rounded-2xl shadow-2xl p-6 text-white relative cursor-pointer border border-[#1B2A41] hover:scale-[1.025] transition-transform duration-200 group focus-within:ring-2 focus-within:ring-cyan-400"
+      className="max-w-sm bg-gradient-to-br from-[#0B0D17] via-[#1B2A41] to-[#005288] rounded-2xl shadow-2xl p-6 text-white relative cursor-pointer border border-[#1B2A41] hover:scale-[1.025] transition-transform duration-200 group"
       onClick={handleCardClick}
+      onMouseEnter={handleMouseEnter}
+      onFocus={handleMouseEnter}
       role="listitem"
       aria-label={`Launch card for ${title}`}
       tabIndex={0}

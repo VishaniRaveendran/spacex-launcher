@@ -8,12 +8,7 @@ import SearchBar from "@/components/launch/SearchFilters/Search";
 import { Typography } from "@/components/common/Typography/Typography";
 import { LaunchCard } from "@/components/launch/LaunchCard/LaunchCard";
 import { useLaunches } from "@/hooks/useLaunches";
-import { useFavorites } from "@/hooks/useFavorites";
-import {
-  fetchAllLaunchYears,
-  fetchFilteredLaunchCount,
-  fetchTotalLaunchCount,
-} from "@/lib/api/client";
+import { useFavoritesContext } from "@/hooks/FavoritesContext";
 import { Filters } from "@/components/common/Filters/Filters";
 import { ListSkeleton } from "@/components/common/LoadingSkeleton/ListSkeleton";
 import { CountMessage } from "@/components/launch/CountMessage/CountMessage";
@@ -40,9 +35,6 @@ export function LaunchListView() {
   );
   const [page, setPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
-  const [yearOptions, setYearOptions] = useState<string[]>(["All Years"]);
-  const [totalCount, setTotalCount] = useState<number | null>(null);
-  const [filteredCount, setFilteredCount] = useState<number | null>(null);
 
   // Effects
   useEffect(() => {
@@ -76,25 +68,6 @@ export function LaunchListView() {
     sortOption,
   ]);
 
-  useEffect(() => {
-    fetchAllLaunchYears().then((years) => {
-      setYearOptions([...years.reverse(), "All Years"]);
-    });
-    fetchTotalLaunchCount().then((count) => setTotalCount(count));
-  }, []);
-
-  useEffect(() => {
-    const success =
-      selectedLaunch === "Success"
-        ? true
-        : selectedLaunch === "Failed"
-        ? false
-        : undefined;
-    fetchFilteredLaunchCount(selectedYear, success).then((count) =>
-      setFilteredCount(count)
-    );
-  }, [selectedYear, selectedLaunch]);
-
   const pageSize = 15;
   const normalizedSort = sortOption.toLowerCase();
   const sortBy =
@@ -112,6 +85,9 @@ export function LaunchListView() {
     loading,
     error,
     hasMore: launchesHasMore,
+    allYears,
+    totalCount,
+    filteredCount,
   } = useLaunches({
     searchTerm: debouncedSearch,
     yearFilter,
@@ -125,7 +101,7 @@ export function LaunchListView() {
     favorites: favouriteIds,
     toggleFavorite,
     isFavorite,
-  } = useFavorites();
+  } = useFavoritesContext();
 
   useEffect(() => {
     if (isFetching && !loading) setIsFetching(false);
@@ -162,7 +138,7 @@ export function LaunchListView() {
             setFavouritesActive={setFavouritesActive}
             sortOption={sortOption}
             setSortOption={setSortOption}
-            yearOptions={yearOptions}
+            yearOptions={allYears}
             aria-label="Launch filters"
           />
           <Typography

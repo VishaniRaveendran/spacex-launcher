@@ -1,6 +1,7 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { FavoritesProvider } from "@/hooks/FavoritesContext";
 
 describe("LaunchListView", () => {
   beforeEach(() => {
@@ -40,13 +41,19 @@ describe("LaunchListView", () => {
     vi.mock("@/hooks/useDebouncedValue", () => ({
       useDebouncedValue: (v: string) => v,
     }));
-    vi.mock("@/hooks/useFavorites", () => ({
-      useFavorites: () => ({
-        favorites: ["1"],
-        toggleFavorite: vi.fn(),
-        isFavorite: (id: string) => id === "1",
-      }),
-    }));
+    vi.mock("@/hooks/FavoritesContext", () => {
+      return {
+        useFavoritesContext: () => ({
+          favorites: ["1"],
+          toggleFavorite: vi.fn(),
+          isFavorite: (id: string) => id === "1",
+          clearFavorites: vi.fn(),
+        }),
+        FavoritesProvider: ({ children }: { children: React.ReactNode }) => (
+          <>{children}</>
+        ),
+      };
+    });
     vi.mock("@/lib/api/client", () => ({
       fetchAllLaunchYears: () => Promise.resolve(["2023", "2022"]),
       fetchFilteredLaunchCount: () => Promise.resolve(2),
@@ -103,7 +110,11 @@ describe("LaunchListView", () => {
 
   it("renders a list of launches", async () => {
     const { LaunchListView } = await import("./LaunchListView");
-    render(<LaunchListView />);
+    render(
+      <FavoritesProvider>
+        <LaunchListView />
+      </FavoritesProvider>
+    );
     const cards = screen.getAllByTestId("launch-card");
     expect(cards.length).toBeGreaterThanOrEqual(2);
     expect(cards[0].textContent).toBe("FalconSat");
@@ -112,13 +123,21 @@ describe("LaunchListView", () => {
 
   it("renders filters", async () => {
     const { LaunchListView } = await import("./LaunchListView");
-    render(<LaunchListView />);
+    render(
+      <FavoritesProvider>
+        <LaunchListView />
+      </FavoritesProvider>
+    );
     expect(screen.getAllByTestId("filters")[0]).toBeTruthy();
   });
 
   it("shows count message", async () => {
     const { LaunchListView } = await import("./LaunchListView");
-    render(<LaunchListView />);
+    render(
+      <FavoritesProvider>
+        <LaunchListView />
+      </FavoritesProvider>
+    );
     expect(screen.getAllByTestId("count-message")[0]).toBeTruthy();
   });
 
@@ -132,13 +151,21 @@ describe("LaunchListView", () => {
       }),
     }));
     const { LaunchListView } = await import("./LaunchListView");
-    render(<LaunchListView />);
+    render(
+      <FavoritesProvider>
+        <LaunchListView />
+      </FavoritesProvider>
+    );
     expect(screen.getAllByTestId("loading-skeleton")[0]).toBeTruthy();
   });
 
   it("shows no more launches message if hasMore is false", async () => {
     const { LaunchListView } = await import("./LaunchListView");
-    render(<LaunchListView />);
+    render(
+      <FavoritesProvider>
+        <LaunchListView />
+      </FavoritesProvider>
+    );
     const msgs = screen.getAllByText(/no more launches to load/i);
     expect(msgs.length).toBeGreaterThanOrEqual(1);
   });
